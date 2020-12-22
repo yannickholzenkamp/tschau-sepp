@@ -1,0 +1,18 @@
+<div class="start-container">
+  <div class="box">
+    <h1>Tschau Sepp</h1>
+
+    <app-start-step1 *ngIf="!(gameId | async)"></app-start-step1>
+    <app-start-step2 *ngIf="gameId | async"></app-start-step2>
+
+    <p *ngIf="gameId | async">Spiel-ID: {{gameId | async}}</p>
+
+    <div class="github">
+      <a href="https://github.com/yannickholzenkamp/tschau-sepp-frontend">
+        <fa-icon [icon]="faGithub"></fa-icon>
+      </a>
+    </div>
+
+
+  </div>
+</div>

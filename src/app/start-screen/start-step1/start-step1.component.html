@@ -1,0 +1,21 @@
+<div class="step1">
+  <button mat-raised-button color="primary" (click)="createGame()">Neues Spiel starten</button>
+
+  <div class="container">
+    <div class="line">
+      <mat-divider></mat-divider>
+    </div>
+    <div class="text mat-typography">oder</div>
+    <div class="line">
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+
+  <mat-form-field class="game-id">
+    <mat-label>Spiel-ID</mat-label>
+    <input matInput type="text" [(ngModel)]="gameId" (keyup)="changedId()" (keydown.enter)="joinGame()" maxlength="5" placeholder="ID eines bestehenden Spiels">
+    <mat-hint>{{hint}}</mat-hint>
+    <mat-hint align="end">{{gameId.length}} / 5</mat-hint>
+  </mat-form-field>
+  <button mat-raised-button color="accent" (click)="joinGame()" [disabled]="!enteredValidGameId">Spiel beitreten</button>
+</div>

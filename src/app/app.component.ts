@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {AppService} from './app.service';
+import {StateService} from './state.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'tschau-sepp-frontend';
+
+  isGameRunning: Observable<boolean>;
+
+  constructor(private stateService: StateService) {
+    this.isGameRunning = this.stateService.isGameRunning();
+  }
+
 }

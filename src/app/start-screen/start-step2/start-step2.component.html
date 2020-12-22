@@ -1,0 +1,10 @@
+<div class="step2">
+  <mat-form-field class="player-name">
+    <mat-label>Dein Name</mat-label>
+    <input matInput type="text" [(ngModel)]="name" (keydown.enter)="enterGame()" maxlength="25" placeholder="Name" autofocus>
+    <mat-hint>{{hint}}</mat-hint>
+    <mat-hint align="end">{{name.length}} / 25</mat-hint>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="enterGame()">Weiter</button>
+</div>

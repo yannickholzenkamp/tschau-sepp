@@ -1,0 +1,29 @@
+.player {
+  margin: 20px;
+
+  fa-icon {
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  p {
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-family: 'Raleway', sans-serif;
+  }
+
+  &.highlighted {
+    color: white;
+
+    fa-icon {
+      color: white;
+    }
+  }
+
+  &.active {
+    color: darkred;
+
+    fa-icon {
+      color: darkred;
+    }
+  }
+}

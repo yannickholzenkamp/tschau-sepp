@@ -1,0 +1,24 @@
+mat-card {
+  height: 100px;
+  width: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 5px;
+  cursor: move;
+  margin: 10px;
+
+  &.disabled {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  img {
+    height: 45px;
+    width: 45px;
+  }
+
+  p {
+    margin: 0;
+  }
+}

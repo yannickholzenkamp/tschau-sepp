@@ -1,0 +1,16 @@
+.badge-container {
+  padding: 0 10px 20px;
+
+  .badge {
+    background-color: white;
+    color: darkred;
+    border-radius: 10px;
+    padding: 5px;
+    transition: background-color 1s ease;
+
+    &.special {
+      background-color: darkred;
+      color: white;
+    }
+  }
+}

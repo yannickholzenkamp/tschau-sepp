@@ -1,0 +1,6 @@
+<div *ngIf="players && players.length > 0" class="players">
+  <app-player *ngFor="let player of players" [name]="player.name"
+              [isHighlighted]="player.id === myPlayerId"
+              [isActive]="activePlayer && player.id === activePlayer.id">
+  </app-player>
+</div>

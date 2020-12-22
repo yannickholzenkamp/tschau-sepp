@@ -1,0 +1,44 @@
+<div class="game-container">
+
+  <div class="box" *ngIf="isCreated() || !matchState">
+    <h1>Spiel-ID: {{gameId}}</h1>
+
+    <app-playerscreen [players]="players"
+                      [activePlayer]="activePlayer"
+                      [myPlayerId]="playerId">
+    </app-playerscreen>
+
+    <div *ngIf="!players || !players.length > 0" class="spinner-container">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+
+    <button mat-raised-button color="primary" (click)="giveCards()"
+            [disabled]="requestedStart || players.length <= 1">Karten geben
+    </button>
+  </div>
+
+  <div class="game" *ngIf="isStarted()">
+    <div class="stack">
+      <div class="stack-cards">
+        <app-play-card-back (click)="drawCard()"></app-play-card-back>
+        <app-play-card-place *ngIf="!lastDiscardedCard"></app-play-card-place>
+        <app-play-card *ngIf="lastDiscardedCard" [card]="lastDiscardedCard"></app-play-card>
+      </div>
+    </div>
+    <div>
+      <div class="cards">
+        <app-play-card *ngFor="let card of cards" [card]="card"
+                       [isPuttable]="isPuttable(card, lastDiscardedCard)"
+                       (selectCard)="selectCard($event)"></app-play-card>
+      </div>
+      <div class="player">
+        <app-playerscreen [players]="players"
+                          [activePlayer]="activePlayer"
+                          [myPlayerId]="playerId">
+        </app-playerscreen>
+      </div>
+      <app-game-hint [activePlayer]="activePlayer" [myPlayerId]="playerId" [specialHint]="specialHint"></app-game-hint>
+    </div>
+  </div>
+
+</div>

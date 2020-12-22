@@ -1,0 +1,14 @@
+mat-card {
+  height: 100px;
+  width: 75px;
+  padding: 5px;
+  margin: 10px;
+
+  .card-back {
+    background-image: url('/assets/cardback.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+  }
+}
