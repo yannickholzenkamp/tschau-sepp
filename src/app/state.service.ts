@@ -19,6 +19,7 @@ export class StateService {
   private _matchState = new BehaviorSubject<MatchState>(MatchState.CREATED);
   private _lastDiscardedCard = new BehaviorSubject<Card>(null);
   private _round = new BehaviorSubject<number>(0);
+  private _winner = new BehaviorSubject<Player>(null);
 
   constructor(private appService: AppService) {
     interval(2000).pipe(
@@ -38,6 +39,9 @@ export class StateService {
         }
         if (gameMeta.state !== this._matchState.getValue()) {
           this._matchState.next(gameMeta.state)
+        }
+        if (gameMeta.winner !== null) {
+          this._winner.next(gameMeta.winner)
         }
         if (gameMeta.lastDiscardedCard !== this._lastDiscardedCard.getValue()) {
           this._lastDiscardedCard.next(gameMeta.lastDiscardedCard);
@@ -76,6 +80,10 @@ export class StateService {
 
   public getRound(): Observable<number> {
     return this._round;
+  }
+
+  public getWinner(): Observable<Player> {
+    return this._winner;
   }
 
   public getActivePlayer(): Observable<Player> {
@@ -126,14 +134,15 @@ export class StateService {
     return this.appService.isGameExisting(gameId);
   }
 
-  public drawCard(): void {
-    this.appService.drawCard(this._gameId.getValue(), this._playerId).pipe(
+  public drawCard(): Observable<Card> {
+    return this.appService.drawCard(this._gameId.getValue(), this._playerId).pipe(
       map(card => {
         let newState = [...this._cards.getValue(), card];
         this._cards.next(newState);
+        return card;
       }),
       first()
-    ).subscribe();
+    );
   }
 
   public putCard(card: Card): void {
@@ -151,7 +160,21 @@ export class StateService {
 
   public nextPlayer(): void {
     this.appService.nextPlayer(this._gameId.getValue()).pipe(
-      map(() => this.updateStore())
+      map(() => this.updateStore()),
+      first()
+    ).subscribe();
+  }
+
+  public skipPlayer(): void {
+    this.appService.nextPlayer(this._gameId.getValue()).pipe(
+      map(() => {
+          this.appService.nextPlayer(this._gameId.getValue()).pipe(
+            map(() => this.updateStore()),
+            first()
+          ).subscribe();
+        }
+      ),
+      first()
     ).subscribe();
   }
 }

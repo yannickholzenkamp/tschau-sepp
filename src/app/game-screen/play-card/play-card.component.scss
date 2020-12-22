@@ -3,14 +3,17 @@ mat-card {
   width: 75px;
   padding: 4px;
   margin: 10px;
-  cursor: pointer;
   background-image: url('/assets/cardback.png');
   background-repeat: no-repeat;
   background-size: cover;
 
-  &:hover, &:focus, &:active {
-    background-image: none;
-    background-color: #dd5541;
+  &.clickable {
+    cursor: pointer;
+
+    &:hover, &:focus, &:active {
+      background-image: none;
+      background-color: #dd5541;
+    }
   }
 
   div.card-body {

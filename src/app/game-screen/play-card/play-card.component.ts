@@ -11,6 +11,9 @@ export class PlayCardComponent {
   @Input()
   card: Card;
 
+  @Input()
+  isClickable = true;
+
   @Output()
   selectCard: EventEmitter<Card> = new EventEmitter();
 

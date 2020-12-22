@@ -6,6 +6,7 @@
 
   fa-icon {
     color: rgba(0, 0, 0, 0.5);
+    transition: color 1s ease;
   }
 
   p {
@@ -18,6 +19,7 @@
     width: 23px;
     border-radius: 5px;
     background-color: rgba(0, 0, 0, 0.5);
+    transition: background-color 1s ease;
     color: white;
     display: flex;
     justify-content: center;

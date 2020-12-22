@@ -17,6 +17,14 @@
     </button>
   </div>
 
+  <div class="box" *ngIf="isOver()">
+    <h1>
+      Das Spiel ist vorbei.<br>
+      {{winner?.name}} hat gewonnen!
+    </h1>
+    <button mat-raised-button color="primary" (click)="reload()">Hauptmenü</button>
+  </div>
+
   <div class="game" *ngIf="isStarted()">
     <div class="stack">
       <div class="stack-cards">
@@ -25,7 +33,7 @@
         </div>
         <div class="stack-container">
           <app-play-card-place *ngIf="!lastDiscardedCard"></app-play-card-place>
-          <app-play-card *ngIf="lastDiscardedCard" [card]="lastDiscardedCard"></app-play-card>
+          <app-play-card *ngIf="lastDiscardedCard" [card]="lastDiscardedCard" [isClickable]="false"></app-play-card>
         </div>
       </div>
     </div>

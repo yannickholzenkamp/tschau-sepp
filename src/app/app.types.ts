@@ -6,6 +6,7 @@ export interface GameMeta {
   activePlayer?: Player;
   lastDiscardedCard?: Card;
   round?: number;
+  winner?: Player;
 }
 
 export enum MatchState {

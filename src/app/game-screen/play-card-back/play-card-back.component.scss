@@ -3,6 +3,11 @@ mat-card {
   width: 75px;
   padding: 5px;
   margin: 10px;
+  cursor: pointer;
+
+  &:hover, &:focus, &:active {
+    background-color: #dd5541;
+  }
 
   .card-back {
     background-image: url('/assets/cardback.png');

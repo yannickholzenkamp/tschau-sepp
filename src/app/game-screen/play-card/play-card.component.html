@@ -1,4 +1,4 @@
-<mat-card (click)="clickCard()" draggable="false">
+<mat-card (click)="clickCard()" [ngClass]="{'clickable': isClickable}" draggable="false">
   <div class="card-body">
 
     <ng-container *ngIf="isNumberCard">
