@@ -4,7 +4,7 @@ import {Card, GameMeta} from './app.types';
 import {Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
-const BASE_URL = 'http://localhost:8080/api';
+const BASE_URL = 'http://yannick-tschau-sepp-backend.apps.okd.baloise.dev/api';
 const CREATE_GAME = BASE_URL + '/games/create';
 const GET_GAME = BASE_URL + '/games/{id}';
 const JOIN_GAME = BASE_URL + '/games/{id}/join';
