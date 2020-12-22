@@ -2,9 +2,10 @@ export interface GameMeta {
   id: string;
   playerId?: number;
   players?: Player[];
-  state: MatchState;
-  activePlayer: Player;
-  lastDiscardedCard: Card;
+  state?: MatchState;
+  activePlayer?: Player;
+  lastDiscardedCard?: Card;
+  round?: number;
 }
 
 export enum MatchState {

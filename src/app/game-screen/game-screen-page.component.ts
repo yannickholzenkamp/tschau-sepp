@@ -16,6 +16,7 @@ export class GameScreenPageComponent {
   cards: Observable<Card[]>;
   lastDiscardedCard: Observable<Card>;
   gameId: Observable<string>;
+  round: Observable<number>;
   playerId: number;
 
   constructor(private stateService: StateService) {
@@ -26,6 +27,7 @@ export class GameScreenPageComponent {
     this.matchState = stateService.getMatchState();
     this.lastDiscardedCard = stateService.getLastDiscardedCard();
     this.cards = stateService.getCards();
+    this.round = stateService.getRound();
   }
 
 }

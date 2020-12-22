@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {AppService} from './app.service';
 import {StateService} from './state.service';
 import {Observable} from 'rxjs';
 

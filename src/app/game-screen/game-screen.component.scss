@@ -32,6 +32,14 @@ div.game-container {
       .stack-cards {
         display: flex;
         justify-content: center;
+
+        .stack-container {
+          padding: 0;
+          margin: 5px;
+          border: 1px solid white;
+          border-radius: 10px;
+          background-color: rgba(0, 0, 0, 0.3);
+        }
       }
     }
 

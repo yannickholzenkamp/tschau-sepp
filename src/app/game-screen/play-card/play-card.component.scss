@@ -1,24 +1,77 @@
 mat-card {
   height: 100px;
   width: 75px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-  padding: 5px;
-  cursor: move;
+  padding: 4px;
   margin: 10px;
+  cursor: pointer;
+  background-image: url('/assets/cardback.png');
+  background-repeat: no-repeat;
+  background-size: cover;
 
-  &.disabled {
-    background-color: rgba(0, 0, 0, 0.2);
+  &:hover, &:focus, &:active {
+    background-image: none;
+    background-color: #dd5541;
   }
 
-  img {
-    height: 45px;
-    width: 45px;
+  div.card-body {
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+
+    img {
+      height: 45px;
+      width: 45px;
+
+      &.smaller {
+        height: 23px;
+        width: 23px;
+      }
+    }
+
+    .line {
+      width: 100%;
+      height: 22px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .bild-line {
+      width: 100%;
+      height: 19px;
+      display: flex;
+      flex-direction: row;
+
+      &.start {
+        justify-content: flex-start;
+      }
+
+      &.end {
+        justify-content: flex-end;
+      }
+    }
+
+    p {
+      margin: 0 5px;
+      font-size: 15px;
+      font-family: 'Raleway', sans-serif;
+
+      &.bild {
+        font-size: 11px;
+      }
+    }
+
+    .img-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
   }
 
-  p {
-    margin: 0;
-  }
 }

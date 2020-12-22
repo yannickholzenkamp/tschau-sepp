@@ -1,14 +1,43 @@
 .player {
   margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   fa-icon {
     color: rgba(0, 0, 0, 0.5);
   }
 
   p {
-    margin-top: 10px;
-    margin-bottom: 0;
+    margin: 5px 0;
+  }
+
+  .info-container {
+    height: 23px;
+    padding: 4px 2px;
+    width: 23px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-family: 'Raleway', sans-serif;
+
+    &.highlighted {
+      background-color: white;
+      color: black;
+    }
+
+    &.active {
+      background-color: #c91018;
+      color: white;
+    }
+
+    span {
+      font-size: 15px;
+      line-height: 15px;
+    }
   }
 
   &.highlighted {
@@ -20,10 +49,10 @@
   }
 
   &.active {
-    color: darkred;
+    color: #c91018;
 
     fa-icon {
-      color: darkred;
+      color: #c91018;
     }
   }
 }

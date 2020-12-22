@@ -20,20 +20,24 @@
   <div class="game" *ngIf="isStarted()">
     <div class="stack">
       <div class="stack-cards">
-        <app-play-card-back (click)="drawCard()"></app-play-card-back>
-        <app-play-card-place *ngIf="!lastDiscardedCard"></app-play-card-place>
-        <app-play-card *ngIf="lastDiscardedCard" [card]="lastDiscardedCard"></app-play-card>
+        <div class="stack-container">
+          <app-play-card-back (click)="drawCard()"></app-play-card-back>
+        </div>
+        <div class="stack-container">
+          <app-play-card-place *ngIf="!lastDiscardedCard"></app-play-card-place>
+          <app-play-card *ngIf="lastDiscardedCard" [card]="lastDiscardedCard"></app-play-card>
+        </div>
       </div>
     </div>
     <div>
       <div class="cards">
         <app-play-card *ngFor="let card of cards" [card]="card"
-                       [isPuttable]="isPuttable(card, lastDiscardedCard)"
                        (selectCard)="selectCard($event)"></app-play-card>
       </div>
       <div class="player">
         <app-playerscreen [players]="players"
                           [activePlayer]="activePlayer"
+                          [showNumberOfCards]="true"
                           [myPlayerId]="playerId">
         </app-playerscreen>
       </div>

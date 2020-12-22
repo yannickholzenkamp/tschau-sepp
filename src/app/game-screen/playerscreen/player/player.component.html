@@ -2,5 +2,7 @@
   <fa-icon [icon]="faUser"
            size="3x"></fa-icon>
   <p>{{name}}</p>
-  <fa-icon *ngIf="isActive" [icon]="faCaretUp"></fa-icon>
+  <div class="info-container" [ngClass]="{'active': isActive, 'highlighted': (isHighlighted && !isActive)}" *ngIf="showNumberOfCards">
+    <span >{{numberOfCards}}</span>
+  </div>
 </div>

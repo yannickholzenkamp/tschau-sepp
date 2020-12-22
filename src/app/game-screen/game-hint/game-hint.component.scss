@@ -2,14 +2,16 @@
   padding: 0 10px 20px;
 
   .badge {
-    background-color: white;
-    color: darkred;
-    border-radius: 10px;
     padding: 5px;
+    border: 1px solid white;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+
     transition: background-color 1s ease;
 
     &.special {
-      background-color: darkred;
+      background-color: #c91018;
       color: white;
     }
   }

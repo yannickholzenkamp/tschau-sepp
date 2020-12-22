@@ -18,6 +18,7 @@ export class StateService {
   private _activePlayer = new BehaviorSubject<Player>(null);
   private _matchState = new BehaviorSubject<MatchState>(MatchState.CREATED);
   private _lastDiscardedCard = new BehaviorSubject<Card>(null);
+  private _round = new BehaviorSubject<number>(0);
 
   constructor(private appService: AppService) {
     interval(2000).pipe(
@@ -29,7 +30,7 @@ export class StateService {
   private updateStore(): void {
     this.appService.getGame(this._gameId.getValue()).pipe(
       map(gameMeta => {
-        if (gameMeta.players.length !== this._players.getValue().length) {
+        if (true) { // FIXME check length of cards and user id
           this._players.next(gameMeta.players);
         }
         if (gameMeta.activePlayer && (!this._activePlayer.getValue() || gameMeta.activePlayer.id !== this._activePlayer.getValue().id)) {
@@ -40,6 +41,9 @@ export class StateService {
         }
         if (gameMeta.lastDiscardedCard !== this._lastDiscardedCard.getValue()) {
           this._lastDiscardedCard.next(gameMeta.lastDiscardedCard);
+        }
+        if (gameMeta.round !== this._round.getValue()) {
+          this._round.next(gameMeta.round);
         }
         if (true) { // FIXME check diff in cards
           let player = gameMeta.players.filter(player => player.id === this._playerId);
@@ -58,20 +62,20 @@ export class StateService {
     this._isGameRunning.next(true);
   }
 
-
   public startMatch(): void {
     this.appService.startGame(this._gameId.getValue()).subscribe();
   }
 
-
-  // FIXME
   public getPlayerId(): number {
     return this._playerId;
   }
 
-
   public getPlayers(): Observable<Player[]> {
     return this._players;
+  }
+
+  public getRound(): Observable<number> {
+    return this._round;
   }
 
   public getActivePlayer(): Observable<Player> {
@@ -126,7 +130,6 @@ export class StateService {
     this.appService.drawCard(this._gameId.getValue(), this._playerId).pipe(
       map(card => {
         let newState = [...this._cards.getValue(), card];
-        console.log('new state', newState);
         this._cards.next(newState);
       }),
       first()
@@ -139,11 +142,16 @@ export class StateService {
         let newState = [...this._cards.getValue()];
         let index = newState.findIndex(c => c.type === card.type && c.number === card.number);
         newState.splice(index, 1)
-        console.log('new state', newState);
         this._cards.next(newState);
         this.updateStore();
       }),
       first()
+    ).subscribe();
+  }
+
+  public nextPlayer(): void {
+    this.appService.nextPlayer(this._gameId.getValue()).pipe(
+      map(() => this.updateStore())
     ).subscribe();
   }
 }

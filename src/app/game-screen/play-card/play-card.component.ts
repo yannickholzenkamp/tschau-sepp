@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Card, CardType} from '../../app.types';
+import {Card, CardNumber, CardType} from '../../app.types';
 
 @Component({
   selector: 'app-play-card',
@@ -10,9 +10,6 @@ export class PlayCardComponent {
 
   @Input()
   card: Card;
-
-  @Input()
-  isPuttable = true;
 
   @Output()
   selectCard: EventEmitter<Card> = new EventEmitter();
@@ -27,6 +24,55 @@ export class PlayCardComponent {
         return 'assets/schellen.PNG';
       case CardType.SCHILTEN:
         return 'assets/schilten.PNG';
+    }
+  }
+
+  get isNumberCard(): boolean {
+    switch (this.card.number) {
+      case CardNumber.SECHS:
+      case CardNumber.SIEBEN:
+      case CardNumber.ACHT:
+      case CardNumber.NEUN:
+      case CardNumber.BANNER:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  get isBildkarte(): boolean {
+    switch (this.card.number) {
+      case CardNumber.UNDER:
+      case CardNumber.OBER:
+      case CardNumber.KOENIG:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  get isAss(): boolean {
+    return this.card.number === CardNumber.ASS;
+  }
+
+  get cardNumber(): string {
+    switch (this.card.number) {
+      case CardNumber.SECHS:
+        return '6';
+      case CardNumber.SIEBEN:
+        return '7';
+      case CardNumber.ACHT:
+        return '8';
+      case CardNumber.NEUN:
+        return '9';
+      case CardNumber.BANNER:
+        return '10';
+      case CardNumber.UNDER:
+        return 'UNDER';
+      case CardNumber.OBER:
+        return 'OBER';
+      case CardNumber.KOENIG:
+        return 'KÖNIG';
     }
   }
 

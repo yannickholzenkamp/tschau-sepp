@@ -24,7 +24,7 @@ export class GameHintComponent {
     } else if (this.activePlayer.id === this.myPlayerId) {
       return 'Du bist dran';
     } else {
-      return this.activePlayer.name + ' ist dran (' + this.activePlayer.cards.length + ' Karten)';
+      return this.activePlayer.name + ' ist dran';
     }
   }
 

@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {StateService} from '../state.service';
-import {Card, MatchState, Player} from '../app.types';
+import {Card, CardNumber, MatchState, Player} from '../app.types';
 
 @Component({
   selector: 'app-game-screen',
@@ -30,8 +30,13 @@ export class GameScreenComponent {
   @Input()
   playerId: number;
 
+  @Input()
+  round: number;
+
   requestedStart = false;
   specialHint;
+  drawnLastInRound;
+  drawnCard = false;
 
   constructor(private stateService: StateService) {
   }
@@ -56,11 +61,44 @@ export class GameScreenComponent {
       this.addSpecialHint('Diese Karte passt leider nicht.');
     } else {
       this.stateService.putCard(card);
+      if (this.canPutACardOnTop(card)) {
+        if (this.doIHaveMatchingOnTopCards(card)) {
+          this.addSpecialHint('Du kannst noch weitere Karten legen.');
+        } else {
+          this.addSpecialHint('Du dürftest noch weitere Karen legen, hast aber keine passenden.');
+          this.stateService.nextPlayer();
+        }
+      } else {
+        this.stateService.nextPlayer();
+      }
     }
   }
 
+  private canPutACardOnTop(card: Card) {
+    return card.number === CardNumber.ASS ||
+      card.number === CardNumber.SECHS;
+  }
+
+  private doIHaveMatchingOnTopCards(card: Card) {
+    return this.cards.filter(c => c.type === card.type || c.number === card.number).length > 0;
+  }
+
   drawCard() {
-    this.stateService.drawCard();
+    if (this.isMyTurn()) {
+      if (this.hasDrawnInThisRound()) {
+        this.addSpecialHint('Du hast in dieser Runde schon gezogen.')
+      } else {
+        this.stateService.drawCard();
+        this.drawnCard = true;
+        this.drawnLastInRound = this.round;
+      }
+    } else {
+      this.addSpecialHint('Du kannst nur ziehen, wenn du dran bist.');
+    }
+  }
+
+  hasDrawnInThisRound() {
+    return this.drawnLastInRound === this.round && this.drawnCard;
   }
 
   isMyTurn() {

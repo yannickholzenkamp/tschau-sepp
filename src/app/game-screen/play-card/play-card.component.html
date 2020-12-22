@@ -1,5 +1,41 @@
-<mat-card (click)="clickCard()" [ngClass]="{'disabled': !isPuttable}">
-  <p>{{card.number}}</p>
-  <img [src]="imgSrc">
-  <p>{{card.number}}</p>
+<mat-card (click)="clickCard()" draggable="false">
+  <div class="card-body">
+
+    <ng-container *ngIf="isNumberCard">
+
+      <div class="line">
+        <p>{{cardNumber}}</p>
+        <p>{{cardNumber}}</p>
+      </div>
+
+      <img class="smaller" [src]="imgSrc" draggable="false">
+
+      <div class="line">
+        <p>{{cardNumber}}</p>
+        <p>{{cardNumber}}</p>
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isBildkarte">
+
+      <div class="bild-line start">
+        <p class="bild">{{cardNumber}}</p>
+      </div>
+
+      <img [src]="imgSrc" draggable="false">
+
+      <div class="bild-line end">
+        <p class="bild">{{cardNumber}}</p>
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isAss">
+      <div class="img-container">
+        <img [src]="imgSrc" draggable="false">
+      </div>
+    </ng-container>
+
+  </div>
 </mat-card>

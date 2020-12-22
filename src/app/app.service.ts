@@ -4,12 +4,13 @@ import {Card, GameMeta} from './app.types';
 import {Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
-const BASE_URL = 'http://yannick-tschau-sepp-backend.apps.okd.baloise.dev/api';
+const BASE_URL = 'http://localhost:8080/api';
 const CREATE_GAME = BASE_URL + '/games/create';
 const GET_GAME = BASE_URL + '/games/{id}';
 const JOIN_GAME = BASE_URL + '/games/{id}/join';
 const START_GAME = BASE_URL + '/games/{id}/start';
 const CARD = BASE_URL + '/games/{id}/cards';
+const NEXT_PLAYER = BASE_URL + '/games/{id}/next';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,11 @@ export class AppService {
 
   public startGame(gameId: string): Observable<GameMeta> {
     const url = START_GAME.replace('{id}', gameId);
+    return this.http.get<GameMeta>(url);
+  }
+
+  public nextPlayer(gameId: string): Observable<GameMeta> {
+    const url = NEXT_PLAYER.replace('{id}', gameId);
     return this.http.get<GameMeta>(url);
   }
 

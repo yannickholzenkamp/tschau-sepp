@@ -16,6 +16,12 @@ export class PlayerComponent {
   name: string;
 
   @Input()
+  numberOfCards: number;
+
+  @Input()
+  showNumberOfCards = false;
+
+  @Input()
   isHighlighted = false;
 
   @Input()

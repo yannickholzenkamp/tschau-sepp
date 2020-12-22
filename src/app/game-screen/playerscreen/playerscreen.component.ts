@@ -18,4 +18,7 @@ export class PlayerscreenComponent {
   @Input()
   myPlayerId: number;
 
+  @Input()
+  showNumberOfCards = false;
+
 }
