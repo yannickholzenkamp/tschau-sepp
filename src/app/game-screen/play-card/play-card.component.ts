@@ -48,6 +48,7 @@ export class PlayCardComponent {
       case CardNumber.UNDER:
       case CardNumber.OBER:
       case CardNumber.KOENIG:
+      case CardNumber.WUNSCH:
         return true;
       default:
         return false;
@@ -76,6 +77,8 @@ export class PlayCardComponent {
         return 'OBER';
       case CardNumber.KOENIG:
         return 'KÖNIG';
+      case CardNumber.WUNSCH:
+        return 'WUNSCH';
     }
   }
 

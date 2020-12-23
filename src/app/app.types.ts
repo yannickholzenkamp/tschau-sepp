@@ -5,8 +5,10 @@ export interface GameMeta {
   state?: MatchState;
   activePlayer?: Player;
   lastDiscardedCard?: Card;
+  allDiscarded?: Card[];
   round?: number;
   winner?: Player;
+  sevens?: number;
 }
 
 export enum MatchState {
@@ -42,5 +44,6 @@ export enum CardNumber {
   UNDER = 'UNDER',
   OBER = 'OBER',
   KOENIG = 'KOENIG',
-  ASS = 'ASS'
+  ASS = 'ASS',
+  WUNSCH = 'WUNSCH'
 }

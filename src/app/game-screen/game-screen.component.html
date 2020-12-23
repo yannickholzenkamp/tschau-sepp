@@ -31,16 +31,26 @@
         <div class="stack-container">
           <app-play-card-back (click)="drawCard()"></app-play-card-back>
         </div>
-        <div class="stack-container">
-          <app-play-card-place *ngIf="!lastDiscardedCard"></app-play-card-place>
-          <app-play-card *ngIf="lastDiscardedCard" [card]="lastDiscardedCard" [isClickable]="false"></app-play-card>
+        <div class="stack-container" (mouseenter)="hoverOverDiscarded = true" (mouseleave)="hoverOverDiscarded = false">
+          <app-play-card *ngIf="!hoverOverDiscarded || !hasMoreThanOneDiscardedCard" [card]="lastDiscardedCard"
+                         [isClickable]="false"></app-play-card>
+          <app-play-card *ngIf="hoverOverDiscarded && hasMoreThanOneDiscardedCard"
+                         [card]="beforeLastDiscardedCard" [isClickable]="false"></app-play-card>
         </div>
       </div>
     </div>
     <div>
-      <div class="cards">
+      <div class="cards" *ngIf="!wishMode">
         <app-play-card *ngFor="let card of cards" [card]="card"
                        (selectCard)="selectCard($event)"></app-play-card>
+      </div>
+      <div class="wish-mode" *ngIf="wishMode">
+        <h1>Welche Karte soll als nächstes kommen?</h1>
+        <div class="wish-cards">
+          {{wishCards | json}}
+          <app-play-card *ngFor="let wishCard of wishCards" [card]="wishCard"
+                         (selectCard)="selectWishCard($event)"></app-play-card>
+        </div>
       </div>
       <div class="player">
         <app-playerscreen [players]="players"

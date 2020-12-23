@@ -50,6 +50,23 @@ div.game-container {
       justify-content: center;
     }
 
+    .wish-mode {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      h1 {
+        font-family: 'Raleway', sans-serif;
+      }
+
+      .wish-cards {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+
+
   }
 
 }

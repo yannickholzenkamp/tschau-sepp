@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, interval, Observable} from 'rxjs';
-import {filter, first, map} from 'rxjs/operators';
-import {Card, MatchState, Player} from './app.types';
+import {catchError, filter, first, map} from 'rxjs/operators';
+import {Card, CardNumber, MatchState, Player} from './app.types';
 import {AppService} from './app.service';
 
 @Injectable({
@@ -18,19 +18,30 @@ export class StateService {
   private _activePlayer = new BehaviorSubject<Player>(null);
   private _matchState = new BehaviorSubject<MatchState>(MatchState.CREATED);
   private _lastDiscardedCard = new BehaviorSubject<Card>(null);
+  private _allDiscarded = new BehaviorSubject<Card[]>([]);
   private _round = new BehaviorSubject<number>(0);
   private _winner = new BehaviorSubject<Player>(null);
+  private _sevens = new BehaviorSubject<number>(0);
+  private lastStoreUpdate = 0;
+  private reloadActive = true;
 
   constructor(private appService: AppService) {
-    interval(2000).pipe(
+    interval(100).pipe(
       filter(() => this._isGameRunning.getValue()),
+      filter(() => this.reloadActive),
       map(() => this.updateStore()),
     ).subscribe();
   }
 
   private updateStore(): void {
+    const ageOfLastUpdate = Date.now() - this.lastStoreUpdate;
+    if (ageOfLastUpdate < 500) {
+      return;
+    }
+
     this.appService.getGame(this._gameId.getValue()).pipe(
       map(gameMeta => {
+        console.log('update store');
         if (true) { // FIXME check length of cards and user id
           this._players.next(gameMeta.players);
         }
@@ -40,22 +51,40 @@ export class StateService {
         if (gameMeta.state !== this._matchState.getValue()) {
           this._matchState.next(gameMeta.state)
         }
-        if (gameMeta.winner !== null) {
+        if (gameMeta.winner) {
           this._winner.next(gameMeta.winner)
+        }
+        if (gameMeta.sevens !== this._sevens.getValue()) {
+          this._sevens.next(gameMeta.sevens)
         }
         if (gameMeta.lastDiscardedCard !== this._lastDiscardedCard.getValue()) {
           this._lastDiscardedCard.next(gameMeta.lastDiscardedCard);
         }
+        if (gameMeta.allDiscarded && gameMeta.allDiscarded.length !== this._allDiscarded.getValue().length) {
+          this._allDiscarded.next(gameMeta.allDiscarded);
+        }
         if (gameMeta.round !== this._round.getValue()) {
           this._round.next(gameMeta.round);
         }
-        if (true) { // FIXME check diff in cards
-          let player = gameMeta.players.filter(player => player.id === this._playerId);
-          this._cards.next(player && player[0].cards ? player[0].cards : []);
+
+        let player = gameMeta.players.filter(player => player.id === this._playerId)[0];
+        if (!this.areCardsTheSame(player.cards, this._cards.getValue())) {
+          this._cards.next(player.cards);
         }
+
+        this.lastStoreUpdate = Date.now();
       }),
       first()
     ).subscribe();
+  }
+
+  private areCardsTheSame(a: Card[], b: Card[]) {
+    return a && b && a.filter(c => this.isCardInStack(c, b)).length === a.length &&
+      b.filter(c => this.isCardInStack(c, a)).length === b.length;
+  }
+
+  private isCardInStack(card: Card, stack: Card[]) {
+    return stack.filter(c => card.number === c.number && card.type === c.type).length > 0;
   }
 
   public isGameRunning(): Observable<boolean> {
@@ -102,8 +131,16 @@ export class StateService {
     return this._cards;
   }
 
+  public getAllDiscarded(): Observable<Card[]> {
+    return this._allDiscarded;
+  }
+
   public getGameId(): Observable<string> {
     return this._gameId;
+  }
+
+  public getSevens(): Observable<number> {
+    return this._sevens;
   }
 
   public createGame(): void {
@@ -148,10 +185,13 @@ export class StateService {
   public putCard(card: Card): void {
     this.appService.putCard(this._gameId.getValue(), this._playerId, card).pipe(
       map(() => {
-        let newState = [...this._cards.getValue()];
-        let index = newState.findIndex(c => c.type === card.type && c.number === card.number);
-        newState.splice(index, 1)
-        this._cards.next(newState);
+        if (card.number !== CardNumber.WUNSCH) {
+          let newState = [...this._cards.getValue()];
+          let index = newState.findIndex(c => c.type === card.type && c.number === card.number);
+          newState.splice(index, 1)
+          this._cards.next(newState);
+        }
+        this._lastDiscardedCard.next(card);
         this.updateStore();
       }),
       first()

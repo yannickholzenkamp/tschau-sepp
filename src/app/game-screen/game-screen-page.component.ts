@@ -14,9 +14,11 @@ export class GameScreenPageComponent {
   activePlayer: Observable<Player>;
   matchState: Observable<MatchState>;
   cards: Observable<Card[]>;
+  allDiscarded: Observable<Card[]>;
   lastDiscardedCard: Observable<Card>;
   gameId: Observable<string>;
   round: Observable<number>;
+  sevens: Observable<number>;
   winner: Observable<Player>;
   playerId: number;
 
@@ -28,7 +30,9 @@ export class GameScreenPageComponent {
     this.matchState = stateService.getMatchState();
     this.lastDiscardedCard = stateService.getLastDiscardedCard();
     this.cards = stateService.getCards();
+    this.allDiscarded = stateService.getAllDiscarded();
     this.round = stateService.getRound();
+    this.sevens = stateService.getSevens();
     this.winner = stateService.getWinner();
   }
 

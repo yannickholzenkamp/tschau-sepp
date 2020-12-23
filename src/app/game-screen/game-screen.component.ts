@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {StateService} from '../state.service';
-import {Card, CardNumber, MatchState, Player} from '../app.types';
+import {Card, CardNumber, CardType, MatchState, Player} from '../app.types';
 import {map} from 'rxjs/operators';
 
 @Component({
@@ -26,6 +26,9 @@ export class GameScreenComponent {
   lastDiscardedCard: Card;
 
   @Input()
+  allDiscarded: Card[];
+
+  @Input()
   gameId: string;
 
   @Input()
@@ -35,12 +38,23 @@ export class GameScreenComponent {
   round: number;
 
   @Input()
+  sevens: number;
+
+  @Input()
   winner: Player;
 
   requestedStart = false;
   specialHint;
   drawnLastInRound;
   drawnCards = 0;
+  hoverOverDiscarded = false;
+  wishMode = false;
+  wishCards: Card[] = [
+    {type: CardType.ROSEN, number: CardNumber.WUNSCH},
+    {type: CardType.EICHEL, number: CardNumber.WUNSCH},
+    {type: CardType.SCHELLEN, number: CardNumber.WUNSCH},
+    {type: CardType.SCHILTEN, number: CardNumber.WUNSCH}
+  ]
 
   constructor(private stateService: StateService) {
   }
@@ -65,24 +79,29 @@ export class GameScreenComponent {
   selectCard(card: Card) {
     if (!this.isMyTurn()) {
       this.addSpecialHint('Du bist leider nicht dran.');
-    } else if (this.lastDiscardedCard.number === CardNumber.SIEBEN && card.number != CardNumber.SIEBEN && this.round !== 0 && this.drawnCards < 2) {
-      this.addSpecialHint('Die letzte Karte war eine Sieben. Bitte nimm 2 Karten auf.');
+    } else if (this.sevens > 0 && card.number != CardNumber.SIEBEN && this.round !== 0 && this.drawnCards < (this.sevens * 2)) {
+      let label = this.sevens > 1 ? this.sevens + ' letzten Karten waren 7er.' : 'letzte Karte war eine 7.';
+      this.addSpecialHint('Die ' + label + ' Bitte nimm ' + (this.sevens * 2) + ' Karten auf.');
     } else if (!this.isPuttable(card)) {
       this.addSpecialHint('Diese Karte passt leider nicht.');
     } else {
       this.stateService.putCard(card);
-      if (this.canPutACardOnTop(card)) {
-        if (this.doIHaveMatchingOnTopCards(card)) {
-          this.addSpecialHint('Du kannst noch weitere Karten legen.');
+      if (card.number === CardNumber.UNDER) {
+        this.wishMode = true;
+      } else {
+        if (this.canPutACardOnTop(card)) {
+          if (this.doIHaveMatchingOnTopCards(card)) {
+            this.addSpecialHint('Du kannst noch weitere Karten legen.');
+          } else {
+            this.addSpecialHint('Du dürftest noch weitere Karen legen, hast aber keine passenden.');
+            this.stateService.nextPlayer();
+          }
+        } else if (card.number === CardNumber.ACHT) {
+          this.addSpecialHint('Du hast eine 8 gelegt. Der nächste Spieler wird übersprungen.');
+          this.stateService.skipPlayer();
         } else {
-          this.addSpecialHint('Du dürftest noch weitere Karen legen, hast aber keine passenden.');
           this.stateService.nextPlayer();
         }
-      } else if (card.number === CardNumber.ACHT) {
-        this.addSpecialHint('Du hast eine 8 gelegt. Der nächste Spieler wird übersprungen.');
-        this.stateService.skipPlayer();
-      } else {
-        this.stateService.nextPlayer();
       }
     }
   }
@@ -101,7 +120,7 @@ export class GameScreenComponent {
 
   drawCard() {
     if (this.isMyTurn()) {
-      let allowedDraws = this.lastDiscardedCard.number == CardNumber.SIEBEN ? 3 : 1;
+      let allowedDraws = (2 * this.sevens) + 1;
       if (this.drawnLastInRound === this.round && this.drawnCards >= allowedDraws) {
         this.addSpecialHint('Du hast in dieser Runde schon gezogen.')
       } else {
@@ -132,7 +151,7 @@ export class GameScreenComponent {
   }
 
   isPuttable(card: Card) {
-    return card.type === this.lastDiscardedCard.type || card.number === this.lastDiscardedCard.number;
+    return card.number === CardNumber.UNDER || card.type === this.lastDiscardedCard.type || card.number === this.lastDiscardedCard.number;
   }
 
   addSpecialHint(hint: string) {
@@ -142,5 +161,20 @@ export class GameScreenComponent {
 
   reload() {
     window.location.reload();
+  }
+
+  get hasMoreThanOneDiscardedCard() {
+    return this.allDiscarded && this.allDiscarded.length > 1;
+  }
+
+  get beforeLastDiscardedCard() {
+    return this.hasMoreThanOneDiscardedCard ? this.allDiscarded[this.allDiscarded.length - 2] : null;
+  }
+
+  selectWishCard(card: Card) {
+    console.log(card);
+    this.stateService.putCard(card);
+    this.wishMode = false;
+    this.stateService.nextPlayer();
   }
 }
