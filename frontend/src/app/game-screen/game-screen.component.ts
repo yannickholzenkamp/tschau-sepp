@@ -96,8 +96,8 @@ export class GameScreenComponent {
             this.addSpecialHint('Du dürftest noch weitere Karen legen, hast aber keine passenden.');
             this.stateService.nextPlayer();
           }
-        } else if (card.number === CardNumber.ACHT) {
-          this.addSpecialHint('Du hast eine 8 gelegt. Der nächste Spieler wird übersprungen.');
+        } else if (card.number === CardNumber.SECHS) {
+          this.addSpecialHint('Du hast eine 6 gelegt. Der nächste Spieler wird übersprungen.');
           this.stateService.skipPlayer();
         } else {
           this.stateService.nextPlayer();
@@ -107,8 +107,7 @@ export class GameScreenComponent {
   }
 
   private canPutACardOnTop(card: Card) {
-    return card.number === CardNumber.ASS ||
-      card.number === CardNumber.SECHS;
+    return card.number === CardNumber.ASS;
   }
 
   private doIHaveMatchingOnTopCards(card: Card) {
@@ -139,7 +138,6 @@ export class GameScreenComponent {
 
   continueIfNotPuttable(card: Card) {
     const cardsToCheck = [...this.cards, card];
-    console.log(cardsToCheck);
     if (cardsToCheck.filter(c => this.isPuttable(c)).length < 1) {
       this.addSpecialHint('Du hast leider keine passende Karte');
       this.stateService.nextPlayer();
@@ -172,7 +170,6 @@ export class GameScreenComponent {
   }
 
   selectWishCard(card: Card) {
-    console.log(card);
     this.stateService.putCard(card);
     this.wishMode = false;
     this.stateService.nextPlayer();

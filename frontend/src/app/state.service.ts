@@ -41,7 +41,6 @@ export class StateService {
 
     this.appService.getGame(this._gameId.getValue()).pipe(
       map(gameMeta => {
-        console.log('update store');
         if (true) { // FIXME check length of cards and user id
           this._players.next(gameMeta.players);
         }
