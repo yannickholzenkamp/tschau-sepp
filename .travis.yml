@@ -1,0 +1,15 @@
+matrix:
+  include:
+    - language: java
+      jdk: oraclejdk8
+      before_script:
+        - cd backend
+      script:
+        - mvn install
+    - language: node.js
+      node_js: "12.0"
+      before_script:
+        - cd frontend
+      script:
+        - npm i
+        - npm test
